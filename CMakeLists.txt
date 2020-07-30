@@ -21,7 +21,9 @@ conan_cmake_run(CONANFILE "conanfile.txt"
 
 add_library("dodgetc" SHARED
   "source/godot_native_library.cpp"
+  "source/Mob.cpp"
   "source/Player.cpp"
+  "source/Rng.cpp"
 )
 
 target_include_directories("dodgetc" PRIVATE
@@ -38,6 +40,7 @@ set_target_properties("dodgetc" PROPERTIES
 )
 
 godot_register_library("dodgetc")
+godot_register_class("dodgetc" "Mob")
 godot_register_class("dodgetc" "Player")
 
 install(TARGETS "dodgetc"
