@@ -1,3 +1,5 @@
+#include "Player.hpp"
+
 #include <GDNative.hpp>
 
 extern "C"
@@ -15,5 +17,6 @@ extern "C"
   auto GDN_EXPORT godot_nativescript_init(void * handle) -> void
   {
     godot::Godot::nativescript_init(handle);
+    godot::register_class<dodgetc::Player>();
   }
 }
