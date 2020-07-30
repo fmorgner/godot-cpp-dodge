@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 #include <AnimatedSprite.hpp>
+#include <CollisionShape2D.hpp>
 #include <Input.hpp>
 #include <Viewport.hpp>
 
@@ -17,10 +18,14 @@ namespace dodgetc
 
   auto Player::_register_methods() -> void
   {
-    register_method("_init", &Player::_init);
-    register_method("_ready", &Player::_ready);
-    register_method("_process", &Player::_process);
-    register_property("speed", &Player::speed, default_speed);
+    godot::register_method("_init", &Player::_init);
+    godot::register_method("_ready", &Player::_ready);
+    godot::register_method("_process", &Player::_process);
+    godot::register_method("_on_Player_body_entered", &Player::_on_body_entered);
+
+    godot::register_property("speed", &Player::speed, default_speed);
+
+    godot::register_signal<Player>("hit");
   }
 
   auto Player::_init() -> void
@@ -85,6 +90,13 @@ namespace dodgetc
       animated_sprite->set_animation("up");
       animated_sprite->set_flip_v(velocity.y > 0);
     }
+  }
+
+  auto Player::_on_body_entered(godot::PhysicsBody2D * body) -> void
+  {
+    hide();
+    emit_signal("hit");
+    cast_to<godot::CollisionShape2D>(get_node("CollisionShape2D"))->set_deferred("disabled", true);
   }
 
 }  // namespace dodgetc

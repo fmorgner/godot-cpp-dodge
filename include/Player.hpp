@@ -3,6 +3,7 @@
 
 #include <Area2D.hpp>
 #include <Godot.hpp>
+#include <PhysicsBody2D.hpp>
 #include <Vector2.hpp>
 
 namespace dodgetc
@@ -15,6 +16,8 @@ namespace dodgetc
     auto _init() -> void;
     auto _ready() -> void;
     auto _process(float delta) -> void;
+
+    auto _on_body_entered(godot::PhysicsBody2D * body) -> void;
 
   private:
     GODOT_CLASS(Player, godot::Area2D)
