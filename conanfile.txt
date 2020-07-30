@@ -1,0 +1,2 @@
+[requires]
+godot-cpp/3.2@fmorgner/stable
