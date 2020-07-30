@@ -17,6 +17,8 @@ namespace dodgetc
     auto _ready() -> void;
     auto _process(float delta) -> void;
 
+    auto start(godot::Vector2 position) -> void;
+
     auto _on_body_entered(godot::PhysicsBody2D * body) -> void;
 
   private:

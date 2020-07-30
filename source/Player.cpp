@@ -22,6 +22,7 @@ namespace dodgetc
     godot::register_method("_ready", &Player::_ready);
     godot::register_method("_process", &Player::_process);
     godot::register_method("_on_Player_body_entered", &Player::_on_body_entered);
+    godot::register_method("start", &Player::start);
 
     godot::register_property("speed", &Player::speed, default_speed);
 
@@ -90,6 +91,13 @@ namespace dodgetc
       animated_sprite->set_animation("up");
       animated_sprite->set_flip_v(velocity.y > 0);
     }
+  }
+
+  auto Player::start(godot::Vector2 position) -> void
+  {
+    set_position(position);
+    show();
+    cast_to<godot::CollisionShape2D>(get_node("CollisionShape2D"))->set_disabled(false);
   }
 
   auto Player::_on_body_entered(godot::PhysicsBody2D * body) -> void
