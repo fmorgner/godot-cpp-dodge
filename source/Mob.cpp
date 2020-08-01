@@ -3,13 +3,7 @@
 #include "Rng.hpp"
 
 #include <AnimatedSprite.hpp>
-#include <CollisionShape2D.hpp>
-#include <Input.hpp>
 #include <SpriteFrames.hpp>
-#include <Viewport.hpp>
-
-#include <algorithm>
-#include <cassert>
 
 namespace dodgetc
 {
@@ -31,13 +25,15 @@ namespace dodgetc
 
   auto Mob::_init() -> void
   {
+    minimum_speed = default_minimum_speed;
+    maximum_speed = default_maximum_speed;
   }
 
   auto Mob::_ready() -> void
   {
     auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
     auto mob_types = animated_sprite->get_sprite_frames()->get_animation_names();
-    animated_sprite->set_animation(mob_types[random_int(0, mob_types.size())]);
+    animated_sprite->set_animation(mob_types[random_int(0, mob_types.size() - 1)]);
   }
 
   auto Mob::_on_screen_exited() -> void

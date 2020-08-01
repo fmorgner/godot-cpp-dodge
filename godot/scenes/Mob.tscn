@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://art/enemySwimming_1.png" type="Texture" id=1]
 [ext_resource path="res://art/enemyFlyingAlt_1.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://art/enemyWalking_1.png" type="Texture" id=4]
 [ext_resource path="res://art/enemySwimming_2.png" type="Texture" id=5]
 [ext_resource path="res://art/enemyFlyingAlt_2.png" type="Texture" id=6]
+[ext_resource path="res://bin/dodgetc_Mob.gdns" type="Script" id=7]
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
@@ -34,6 +35,7 @@ height = 28.3156
 ]]
 collision_mask = 0
 gravity_scale = 0.0
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_group_": true
 }
@@ -42,6 +44,7 @@ __meta__ = {
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 1 )
 animation = "walk"
+frame = 1
 playing = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

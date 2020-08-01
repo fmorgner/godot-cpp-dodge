@@ -3,16 +3,16 @@
 
 #include "TypedNodeCastMixin.hpp"
 
-#include <Area2D.hpp>
 #include <Godot.hpp>
 #include <PhysicsBody2D.hpp>
+#include <RigidBody2D.hpp>
 #include <Vector2.hpp>
 
 namespace dodgetc
 {
 
   struct Mob
-      : godot::Area2D
+      : godot::RigidBody2D
       , TypedNodeCastMixin<Mob>
   {
     auto static _register_methods() -> void;
@@ -23,7 +23,7 @@ namespace dodgetc
     auto _on_screen_exited() -> void;
 
   private:
-    GODOT_CLASS(Mob, godot::Area2D)
+    GODOT_CLASS(Mob, godot::RigidBody2D)
 
     int minimum_speed{};
     int maximum_speed{};

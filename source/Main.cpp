@@ -1,6 +1,7 @@
 #include "Main.hpp"
 
 #include "HUD.hpp"
+#include "Mob.hpp"
 #include "Player.hpp"
 #include "Rng.hpp"
 
@@ -14,7 +15,6 @@
 #include <Timer.hpp>
 
 #include <cmath>
-#include <iostream>
 
 namespace dodgetc
 {
@@ -56,15 +56,16 @@ namespace dodgetc
     auto mob_spawn_location = get_typed_node<godot::PathFollow2D>("MobPath/MobSpawnLocation");
     mob_spawn_location->set_offset(random_int());
 
-    auto mob_instance = cast_to<godot::RigidBody2D>(mob->instance());
-    add_child(mob_instance);
-
+    auto mob_instance = cast_to<Mob>(mob->instance());
     mob_instance->set_position(mob_spawn_location->get_position());
     auto direction = mob_spawn_location->get_rotation() + M_PI_2;
     direction += random_range(-M_PI_4, M_PI_4);
     mob_instance->set_rotation(direction);
+    auto minimum_velocity = mob_instance->get("minimum_speed");
+    auto maximum_velocity = mob_instance->get("maximum_speed");
+    mob_instance->set_linear_velocity(godot::Vector2{random_range(minimum_velocity, maximum_velocity), 0}.rotated(direction));
 
-    mob_instance->set_linear_velocity(godot::Vector2{random_range(150.f, 250.f), 0}.rotated(direction));
+    add_child(mob_instance);
   }
 
   auto Main::_on_ScoreTimer_timeout() -> void
