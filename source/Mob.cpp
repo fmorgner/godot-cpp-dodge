@@ -29,9 +29,13 @@ namespace dodgetc
     godot::register_property("maximum_speed", &Mob::maximum_speed, default_maximum_speed);
   }
 
+  auto Mob::_init() -> void
+  {
+  }
+
   auto Mob::_ready() -> void
   {
-    auto animated_sprite = cast_to<godot::AnimatedSprite>(get_node("AnimatedSprite"));
+    auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
     auto mob_types = animated_sprite->get_sprite_frames()->get_animation_names();
     animated_sprite->set_animation(mob_types[random_int(0, mob_types.size())]);
   }

@@ -1,6 +1,8 @@
 #ifndef DODGE_THE_CREEPS_MAIN_HPP
 #define DODGE_THE_CREEPS_MAIN_HPP
 
+#include "TypedNodeCastMixin.hpp"
+
 #include <Godot.hpp>
 #include <Node.hpp>
 #include <PackedScene.hpp>
@@ -9,7 +11,9 @@
 namespace dodgetc
 {
 
-  struct Main : godot::Node
+  struct Main
+      : godot::Node
+      , TypedNodeCastMixin<Main>
   {
     static auto _register_methods() -> void;
 

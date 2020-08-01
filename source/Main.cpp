@@ -36,13 +36,13 @@ namespace dodgetc
 
   auto Main::_on_Player_hit() -> void
   {
-    cast_to<godot::Timer>(get_node("MobTimer"))->stop();
-    cast_to<godot::Timer>(get_node("ScoreTimer"))->stop();
+    get_typed_node<godot::Timer>("MobTimer")->stop();
+    get_typed_node<godot::Timer>("ScoreTimer")->stop();
   }
 
   auto Main::_on_MobTimer_timeout() -> void
   {
-    auto mob_spawn_location = cast_to<godot::PathFollow2D>(get_node("MobPath/MobSpawnLocation"));
+    auto mob_spawn_location = get_typed_node<godot::PathFollow2D>("MobPath/MobSpawnLocation");
     mob_spawn_location->set_offset(random_int());
 
     auto mob_instance = cast_to<godot::RigidBody2D>(mob->instance());
@@ -63,19 +63,19 @@ namespace dodgetc
 
   auto Main::_on_StartTimer_timeout() -> void
   {
-    cast_to<godot::Timer>(get_node("MobTimer"))->start();
-    cast_to<godot::Timer>(get_node("MobTimer"))->start();
+    get_typed_node<godot::Timer>("MobTimer")->start();
+    get_typed_node<godot::Timer>("MobTimer")->start();
   }
 
   auto Main::new_game() -> void
   {
     score = 0;
 
-    auto player = cast_to<Player>(get_node("Player"));
-    auto start_position = cast_to<godot::Position2D>(get_node("StartPosition"));
+    auto player = get_typed_node<Player>("Player");
+    auto start_position = get_typed_node<godot::Position2D>("StartPosition");
     player->start(start_position->get_position());
 
-    cast_to<godot::Timer>(get_node("StartTimer"))->start();
+    get_typed_node<godot::Timer>("StartTimer")->start();
   }
 
 }  // namespace dodgetc

@@ -62,7 +62,7 @@ namespace dodgetc
       --velocity.y;
     }
 
-    auto animated_sprite = cast_to<godot::AnimatedSprite>(get_node("AnimatedSprite"));
+    auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
     assert(animated_sprite);
 
     if (velocity.length() > 0)
@@ -97,14 +97,14 @@ namespace dodgetc
   {
     set_position(position);
     show();
-    cast_to<godot::CollisionShape2D>(get_node("CollisionShape2D"))->set_disabled(false);
+    get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_disabled(false);
   }
 
   auto Player::_on_body_entered(godot::PhysicsBody2D * body) -> void
   {
     hide();
     emit_signal("hit");
-    cast_to<godot::CollisionShape2D>(get_node("CollisionShape2D"))->set_deferred("disabled", true);
+    get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_deferred("disabled", true);
   }
 
 }  // namespace dodgetc

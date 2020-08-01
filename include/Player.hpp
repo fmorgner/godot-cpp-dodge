@@ -1,6 +1,8 @@
 #ifndef DODGE_THE_CREEPS_PLAYER_HPP
 #define DODGE_THE_CREEPS_PLAYER_HPP
 
+#include "TypedNodeCastMixin.hpp"
+
 #include <Area2D.hpp>
 #include <Godot.hpp>
 #include <PhysicsBody2D.hpp>
@@ -9,7 +11,9 @@
 namespace dodgetc
 {
 
-  struct Player : godot::Area2D
+  struct Player
+      : godot::Area2D
+      , TypedNodeCastMixin<Player>
   {
     auto static _register_methods() -> void;
 
