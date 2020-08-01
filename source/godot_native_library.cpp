@@ -1,3 +1,4 @@
+#include "Main.hpp"
 #include "Mob.hpp"
 #include "Player.hpp"
 
@@ -18,6 +19,7 @@ extern "C"
   auto GDN_EXPORT godot_nativescript_init(void * handle) -> void
   {
     godot::Godot::nativescript_init(handle);
+    godot::register_class<dodgetc::Main>();
     godot::register_class<dodgetc::Mob>();
     godot::register_class<dodgetc::Player>();
   }

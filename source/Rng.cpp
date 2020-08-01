@@ -3,6 +3,8 @@
 #include <RandomNumberGenerator.hpp>
 #include <Ref.hpp>
 
+#include <cstdint>
+
 namespace
 {
 
@@ -21,8 +23,18 @@ namespace
 
 namespace dodgetc
 {
-  auto random_int(int lower_bound, int upper_bound) -> int
+  auto random_int(std::int64_t lower_bound, std::int64_t upper_bound) -> std::int64_t
   {
     return get_rng()->randi_range(lower_bound, upper_bound);
+  }
+
+  auto random_int() -> std::int64_t
+  {
+    return get_rng()->randi();
+  }
+
+  auto random_range(float lower_bound, float upper_bound) -> float
+  {
+    return get_rng()->randf_range(lower_bound, upper_bound);
   }
 }  // namespace dodgetc
