@@ -9,6 +9,7 @@
 #include <Position2D.hpp>
 #include <Ref.hpp>
 #include <RigidBody2D.hpp>
+#include <SceneTree.hpp>
 #include <Timer.hpp>
 
 #include <cmath>
@@ -41,6 +42,8 @@ namespace dodgetc
     get_typed_node<godot::Timer>("MobTimer")->stop();
     get_typed_node<godot::Timer>("ScoreTimer")->stop();
     get_typed_node<HUD>("HUD")->show_game_over();
+
+    get_tree()->call_group("mobs", "queue_free");
   }
 
   auto Main::_on_MobTimer_timeout() -> void
