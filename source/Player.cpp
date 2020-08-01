@@ -20,7 +20,7 @@ namespace dodgetc
     godot::register_method("_init", &Player::_init);
     godot::register_method("_ready", &Player::_ready);
     godot::register_method("_process", &Player::_process);
-    godot::register_method("_on_Player_body_entered", &Player::_on_body_entered);
+    godot::register_method("on_body_entered", &Player::on_body_entered);
     godot::register_method("start", &Player::start);
 
     godot::register_property("speed", &Player::speed, default_speed);
@@ -98,7 +98,7 @@ namespace dodgetc
     get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_disabled(false);
   }
 
-  auto Player::_on_body_entered(godot::PhysicsBody2D * body) -> void
+  auto Player::on_body_entered(godot::PhysicsBody2D * body) -> void
   {
     hide();
     emit_signal("hit");

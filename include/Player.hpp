@@ -23,10 +23,10 @@ namespace dodgetc
 
     auto start(godot::Vector2 position) -> void;
 
-    auto _on_body_entered(godot::PhysicsBody2D * body) -> void;
-
   private:
     GODOT_CLASS(Player, godot::Area2D)
+
+    auto on_body_entered(godot::PhysicsBody2D * body) -> void;
 
     int speed{};
     godot::Vector2 screen_size{};
