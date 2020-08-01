@@ -1,5 +1,6 @@
 #include "Main.hpp"
 
+#include "HUD.hpp"
 #include "Player.hpp"
 #include "Rng.hpp"
 
@@ -11,6 +12,7 @@
 #include <Timer.hpp>
 
 #include <cmath>
+#include <iostream>
 
 namespace dodgetc
 {
@@ -22,6 +24,7 @@ namespace dodgetc
     godot::register_method("_on_MobTimer_timeout", &Main::_on_MobTimer_timeout);
     godot::register_method("_on_ScoreTimer_timeout", &Main::_on_ScoreTimer_timeout);
     godot::register_method("_on_StartTimer_timeout", &Main::_on_StartTimer_timeout);
+    godot::register_method("new_game", &Main::new_game);
     godot::register_property("mob", &Main::mob, godot::Ref<godot::PackedScene>{});
   }
 
@@ -31,13 +34,13 @@ namespace dodgetc
 
   auto Main::_ready() -> void
   {
-    new_game();
   }
 
   auto Main::_on_Player_hit() -> void
   {
     get_typed_node<godot::Timer>("MobTimer")->stop();
     get_typed_node<godot::Timer>("ScoreTimer")->stop();
+    get_typed_node<HUD>("HUD")->show_game_over();
   }
 
   auto Main::_on_MobTimer_timeout() -> void
@@ -59,12 +62,13 @@ namespace dodgetc
   auto Main::_on_ScoreTimer_timeout() -> void
   {
     ++score;
+    get_typed_node<HUD>("HUD")->update_score(score);
   }
 
   auto Main::_on_StartTimer_timeout() -> void
   {
     get_typed_node<godot::Timer>("MobTimer")->start();
-    get_typed_node<godot::Timer>("MobTimer")->start();
+    get_typed_node<godot::Timer>("ScoreTimer")->start();
   }
 
   auto Main::new_game() -> void
@@ -76,6 +80,10 @@ namespace dodgetc
     player->start(start_position->get_position());
 
     get_typed_node<godot::Timer>("StartTimer")->start();
+
+    auto hud = get_typed_node<HUD>("HUD");
+    hud->update_score(score);
+    hud->show_message("Get Ready!");
   }
 
 }  // namespace dodgetc
