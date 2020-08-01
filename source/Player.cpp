@@ -94,6 +94,9 @@ namespace dodgetc
   auto Player::start(godot::Vector2 position) -> void
   {
     set_position(position);
+    auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
+    animated_sprite->set_flip_h(false);
+    animated_sprite->set_flip_v(false);
     show();
     get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_disabled(false);
   }
