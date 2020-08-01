@@ -39,6 +39,8 @@ target_link_libraries("dodgetc" PRIVATE
 set_target_properties("dodgetc" PROPERTIES
   CXX_STANDARD "17"
   CXX_STANDARD_REQUIRED YES
+  INTERPROCEDURAL_OPTIMIZATION ON
+  LINK_FLAGS_MINSIZEREL "-s"
 )
 
 godot_register_library("dodgetc")
