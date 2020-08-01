@@ -22,14 +22,14 @@ namespace dodgetc
     auto show_game_over() -> void;
     auto update_score(int score) -> void;
 
-    auto _on_StartButton_pressed() -> void;
-    auto _on_MessageTimer_timeout() -> void;
-
   private:
     GODOT_CLASS(HUD, godot::Node);
 
-    auto _show_start_message() -> void;
-    auto _show_start_button() -> void;
+    auto on_start_button_pressed() -> void;
+    auto on_message_timer_timed_out() -> void;
+
+    auto show_start_message() -> void;
+    auto show_start_button() -> void;
   };
 
 }  // namespace dodgetc
