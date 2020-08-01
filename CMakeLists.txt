@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION "3.17.0")
+cmake_minimum_required(VERSION "3.14.0")
 
 project("dodgetc_native"
   LANGUAGES CXX
