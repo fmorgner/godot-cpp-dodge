@@ -20,15 +20,15 @@ namespace dodgetc
     auto _init() -> void;
     auto _ready() -> void;
 
-    auto _on_Player_hit() -> void;
-    auto _on_MobTimer_timeout() -> void;
-    auto _on_ScoreTimer_timeout() -> void;
-    auto _on_StartTimer_timeout() -> void;
+  private:
+    GODOT_CLASS(Main, godot::Node);
 
     auto new_game() -> void;
 
-  private:
-    GODOT_CLASS(Main, godot::Node);
+    auto on_player_hit() -> void;
+    auto on_mob_timer_timed_out() -> void;
+    auto on_score_timer_timed_out() -> void;
+    auto on_start_timer_timed_out() -> void;
 
     godot::Ref<godot::PackedScene> mob{};
     int score{};

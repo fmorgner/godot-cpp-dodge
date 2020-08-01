@@ -20,10 +20,10 @@ namespace dodgetc
 
   auto Main::_register_methods() -> void
   {
-    godot::register_method("_on_Player_hit", &Main::_on_Player_hit);
-    godot::register_method("_on_MobTimer_timeout", &Main::_on_MobTimer_timeout);
-    godot::register_method("_on_ScoreTimer_timeout", &Main::_on_ScoreTimer_timeout);
-    godot::register_method("_on_StartTimer_timeout", &Main::_on_StartTimer_timeout);
+    godot::register_method("on_player_hit", &Main::on_player_hit);
+    godot::register_method("on_mob_timer_timed_out", &Main::on_mob_timer_timed_out);
+    godot::register_method("on_score_timer_timed_out", &Main::on_score_timer_timed_out);
+    godot::register_method("on_start_timer_timed_out", &Main::on_start_timer_timed_out);
     godot::register_method("new_game", &Main::new_game);
     godot::register_property("mob", &Main::mob, godot::Ref<godot::PackedScene>{});
   }
@@ -32,7 +32,7 @@ namespace dodgetc
   {
   }
 
-  auto Main::_on_Player_hit() -> void
+  auto Main::on_player_hit() -> void
   {
     get_typed_node<godot::Timer>("MobTimer")->stop();
     get_typed_node<godot::Timer>("ScoreTimer")->stop();
@@ -45,7 +45,7 @@ namespace dodgetc
     get_tree()->call_group("mobs", "queue_free");
   }
 
-  auto Main::_on_MobTimer_timeout() -> void
+  auto Main::on_mob_timer_timed_out() -> void
   {
     auto mob_spawn_location = get_typed_node<godot::PathFollow2D>("MobPath/MobSpawnLocation");
     mob_spawn_location->set_offset(random_int());
@@ -62,13 +62,13 @@ namespace dodgetc
     add_child(mob_instance);
   }
 
-  auto Main::_on_ScoreTimer_timeout() -> void
+  auto Main::on_score_timer_timed_out() -> void
   {
     ++score;
     get_typed_node<HUD>("HUD")->update_score(score);
   }
 
-  auto Main::_on_StartTimer_timeout() -> void
+  auto Main::on_start_timer_timed_out() -> void
   {
     get_typed_node<godot::Timer>("MobTimer")->start();
     get_typed_node<godot::Timer>("ScoreTimer")->start();
