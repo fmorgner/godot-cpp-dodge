@@ -6,7 +6,6 @@
 #include <Viewport.hpp>
 
 #include <algorithm>
-#include <cassert>
 
 namespace dodgetc
 {
@@ -63,7 +62,6 @@ namespace dodgetc
     }
 
     auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
-    assert(animated_sprite);
 
     if (velocity.length() > 0)
     {

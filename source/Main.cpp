@@ -10,7 +10,6 @@
 #include <PathFollow2D.hpp>
 #include <Position2D.hpp>
 #include <Ref.hpp>
-#include <RigidBody2D.hpp>
 #include <SceneTree.hpp>
 #include <Timer.hpp>
 
@@ -21,7 +20,6 @@ namespace dodgetc
 
   auto Main::_register_methods() -> void
   {
-    godot::register_method("_ready", &Main::_ready);
     godot::register_method("_on_Player_hit", &Main::_on_Player_hit);
     godot::register_method("_on_MobTimer_timeout", &Main::_on_MobTimer_timeout);
     godot::register_method("_on_ScoreTimer_timeout", &Main::_on_ScoreTimer_timeout);
@@ -31,10 +29,6 @@ namespace dodgetc
   }
 
   auto Main::_init() -> void
-  {
-  }
-
-  auto Main::_ready() -> void
   {
   }
 

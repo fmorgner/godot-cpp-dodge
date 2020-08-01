@@ -4,9 +4,7 @@
 #include "TypedNodeCastMixin.hpp"
 
 #include <Godot.hpp>
-#include <PhysicsBody2D.hpp>
 #include <RigidBody2D.hpp>
-#include <Vector2.hpp>
 
 namespace dodgetc
 {
