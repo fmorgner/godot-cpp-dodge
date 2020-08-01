@@ -2,10 +2,11 @@ cmake_minimum_required(VERSION "3.14.0")
 
 project("dodgetc_native"
   LANGUAGES CXX
+  VERSION "1.0.0"
+  DESCRIPTION "An implementation of the Godot \"Dodge the Creeps!\" tutorial game using godot-cpp"
 )
 
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
-set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/godot")
 
 include("Conan")
 include("Godot")
