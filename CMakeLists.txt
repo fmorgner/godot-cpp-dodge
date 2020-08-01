@@ -41,14 +41,12 @@ set_target_properties("dodgetc" PROPERTIES
   CXX_STANDARD_REQUIRED YES
   INTERPROCEDURAL_OPTIMIZATION ON
   LINK_FLAGS_MINSIZEREL "-s"
+  GODOT_BINARY_INSTALL_DIR "godot/bin"
 )
 
 godot_register_library("dodgetc")
+
 godot_register_class("dodgetc" "HUD")
 godot_register_class("dodgetc" "Main")
 godot_register_class("dodgetc" "Mob")
 godot_register_class("dodgetc" "Player")
-
-install(TARGETS "dodgetc"
-  LIBRARY DESTINATION "bin/linux"
-)

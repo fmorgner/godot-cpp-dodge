@@ -1,84 +1,160 @@
 function(godot_register_library TARGET)
-    if(DEFINED ${PROJECT_NAME}_GODOT_LIBRARIES)
-        if(${TARGET} IN_LIST ${${PROJECT_NAME}_GODOT_LIBRARIES})
-            message(FATAL_ERROR "Library ${TARGET} has already been registered")
-        endif()
-    endif()
+    _godot_target_check_registered("${TARGET}" NO)
+    _godot_target_ensure_absolute_install("${TARGET}")
+    _godot_target_check_install_dir(INSTALL_DIR "${TARGET}")
+    _godot_target_get_library_install_dir(LIBRARY_INSTALL_DIR "${TARGET}")
+    _godot_generate_resource_id(RESOURCE_ID)
 
-    if(NOT DEFINED ${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID)
-        set(${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID "10000")
-    endif()
+    set_target_properties("${TARGET}" PROPERTIES
+        _GODOT_REGISTERED YES
+        _GODOT_RESOURCE_ID ${RESOURCE_ID}
+    )
 
     message(STATUS "Godot: Registering library ${TARGET}")
 
-    math(EXPR ${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID "${${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID} + 1")
-    set(${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID ${${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID} PARENT_SCOPE)
-
-    list(APPEND ${PROJECT_NAME}_GODOT_LIBRARIES TARGET)
-    set(${PROJECT_NAME}_GODOT_LIBRARIES ${${PROJECT_NAME}_GODOT_LIBRARIES} PARENT_SCOPE)
-
-    set(${TARGET}_GODOT_LIBRARY "${TARGET}.gdnlib")
-    set(${TARGET}_GODOT_CONFIGURATION "")
+    set(LIBRARY_DESCRIPTOR_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}.gdnlib")
+    set(LIBRARY_DESCRIPTOR "")
 
     ### [general] Section
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "[general]\n\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "singleton=false\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "load_once=true\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "symbol_prefix=\"godot_\"\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "reloadable=true\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "\n")
+    string(APPEND LIBRARY_DESCRIPTOR "[general]\n\n")
+    string(APPEND LIBRARY_DESCRIPTOR "singleton=false\n")
+    string(APPEND LIBRARY_DESCRIPTOR "load_once=true\n")
+    string(APPEND LIBRARY_DESCRIPTOR "symbol_prefix=\"godot_\"\n")
+    string(APPEND LIBRARY_DESCRIPTOR "reloadable=true\n")
+    string(APPEND LIBRARY_DESCRIPTOR "\n")
 
     ### [entry] Sections
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "[entry]\n\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "X11.64=\"res://bin/linux/lib${TARGET}.so\"\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "Windows.64=\"res://bin/windows/lib${TARGET}.dll\"\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "OSX.64=\"res://bin/osx/lib${TARGET}.dylib\"\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "\n")
+    string(APPEND LIBRARY_DESCRIPTOR "[entry]\n\n")
+    string(APPEND LIBRARY_DESCRIPTOR "X11.64=\"res://bin/linux/lib${TARGET}.so\"\n")
+    string(APPEND LIBRARY_DESCRIPTOR "Windows.64=\"res://bin/windows/lib${TARGET}.dll\"\n")
+    string(APPEND LIBRARY_DESCRIPTOR "OSX.64=\"res://bin/macos/lib${TARGET}.dylib\"\n")
+    string(APPEND LIBRARY_DESCRIPTOR "\n")
 
     ### [dependencies] Sections
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "[dependencies]\n\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "X11.64=[ ]\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "Windows.64=[ ]\n")
-    string(APPEND ${TARGET}_GODOT_CONFIGURATION "OSX.64=[ ]\n")
+    string(APPEND LIBRARY_DESCRIPTOR "[dependencies]\n\n")
+    string(APPEND LIBRARY_DESCRIPTOR "X11.64=[ ]\n")
+    string(APPEND LIBRARY_DESCRIPTOR "Windows.64=[ ]\n")
+    string(APPEND LIBRARY_DESCRIPTOR "OSX.64=[ ]\n")
     
-    file(WRITE "${PROJECT_BINARY_DIR}/${TARGET}.gdnlib" ${${TARGET}_GODOT_CONFIGURATION})
-    install(FILES "${PROJECT_BINARY_DIR}/${TARGET}.gdnlib"
-        DESTINATION "bin"
-    )
+    file(WRITE "${LIBRARY_DESCRIPTOR_FILE}" ${LIBRARY_DESCRIPTOR})
+    install(FILES "${LIBRARY_DESCRIPTOR_FILE}" DESTINATION "${INSTALL_DIR}")
+    install(TARGETS "${TARGET}" DESTINATION "${LIBRARY_INSTALL_DIR}")
 endfunction()
 
 function(godot_register_class TARGET CLASS)
-    if(NOT ${TARGET} IN_LIST ${${PROJECT_NAME}_GODOT_LIBRARIES})
-        message(FATAL_ERROR "Library ${TARGET} that has not been registered")
+    _godot_target_check_registered("${TARGET}" YES)
+    _godot_target_check_install_dir(INSTALL_DIR "${TARGET}")
+    _godot_target_get_resource_id(RESOURCE_ID "${TARGET}")
+    _godot_target_get_registered_classed(REGISTERED_CLASSES "${TARGET}")
+
+    if(${CLASS} IN_LIST "${GODOT_CLASSES}")
+        message(FATAL_ERROR "Class ${TARGET}::${CLASS} has already been registered")
     endif()
 
-    if(DEFINED ${PROJECT_NAME}_${TARGET}_GODOT_CLASSES)
-        if(${CLASS} IN_LIST ${${PROJECT_NAME}_${TARGET}_GODOT_CLASSES})
-            message(FATAL_ERROR "Class ${CLASS} in ${TARGET} has already been registered")
-        endif()
-    endif()
+    message(STATUS "Godot: Registering class ${TARGET}::${CLASS}")
 
-    message(STATUS "Godot: Registering class ${CLASS} in ${TARGET}")
-
-    set(CLASS_CONFIGURATION "")
+    set(CLASS_DESCRIPTOR_FILE "${CMAKE_CURRENT_BINARY_DIR}/${TARGET}_${CLASS}.gdns")
+    set(CLASS_DESCRIPTOR "")
 
     ### [gdresource] Section
-    string(APPEND CLASS_CONFIGURATION "[gd_resource type=\"NativeScript\" load_steps=2 format=2]\n")
-    string(APPEND CLASS_CONFIGURATION "\n")
+    string(APPEND CLASS_DESCRIPTOR "[gd_resource type=\"NativeScript\" load_steps=2 format=2]\n")
+    string(APPEND CLASS_DESCRIPTOR "\n")
 
     ### [ext_resource] Section
-    string(APPEND CLASS_CONFIGURATION "[ext_resource path=\"res://bin/${TARGET}.gdnlib\" type=\"GDNativeLibrary\" id=${${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID}]\n")
-    string(APPEND CLASS_CONFIGURATION "\n")
+    string(APPEND CLASS_DESCRIPTOR "[ext_resource path=\"res://bin/${TARGET}.gdnlib\" type=\"GDNativeLibrary\" id=${RESOURCE_ID}]\n")
+    string(APPEND CLASS_DESCRIPTOR "\n")
 
     ### [resource] Section
-    string(APPEND CLASS_CONFIGURATION "[resource]\n\n")
-    string(APPEND CLASS_CONFIGURATION "resource_name = \"${TARGET}\"\n")
-    string(APPEND CLASS_CONFIGURATION "class_name = \"${CLASS}\"\n")
-    string(APPEND CLASS_CONFIGURATION "library = ExtResource( ${${PROJECT_NAME}_${TARGET}_GODOT_RESOURCE_ID} )\n")
-    string(APPEND CLASS_CONFIGURATION "\n")
+    string(APPEND CLASS_DESCRIPTOR "[resource]\n\n")
+    string(APPEND CLASS_DESCRIPTOR "resource_name = \"${TARGET}\"\n")
+    string(APPEND CLASS_DESCRIPTOR "class_name = \"${CLASS}\"\n")
+    string(APPEND CLASS_DESCRIPTOR "library = ExtResource( ${RESOURCE_ID} )\n")
+    string(APPEND CLASS_DESCRIPTOR "\n")
 
-    file(WRITE "${PROJECT_BINARY_DIR}/${TARGET}_${CLASS}.gdns" ${CLASS_CONFIGURATION})
-    install(FILES "${PROJECT_BINARY_DIR}/${TARGET}_${CLASS}.gdns"
-        DESTINATION "bin"
-    )
+    file(WRITE "${CLASS_DESCRIPTOR_FILE}" ${CLASS_DESCRIPTOR})
+    install(FILES "${CLASS_DESCRIPTOR_FILE}" DESTINATION "${INSTALL_DIR}")
+endfunction()
+
+define_property(TARGET PROPERTY "GODOT_BINARY_INSTALL_DIR"
+  BRIEF_DOCS "The binary installation directory of the Godot project"
+  FULL_DOCS "This property defines the directory in which the target will be installed in order for Godot to find it."
+)
+
+function(_godot_target_check_install_dir VAR TARGET)
+    get_target_property(BINARY_INSTALL_DIR "${TARGET}" GODOT_BINARY_INSTALL_DIR)
+
+    if(NOT BINARY_INSTALL_DIR)
+        message(FATAL_ERROR "Target property GODOT_BINARY_INSTALL_DIR not set for target ${TARGET}")
+    endif()
+
+    set(${VAR} ${BINARY_INSTALL_DIR} PARENT_SCOPE)
+endfunction()
+
+function(_godot_target_ensure_absolute_install TARGET)
+    _godot_target_check_install_dir(INSTALL_DIR "${TARGET}")
+
+    if(NOT IS_ABSOLUTE "${INSTALL_DIR}")
+        set(INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/${INSTALL_DIR}")
+        set_target_properties("${TARGET}" PROPERTIES
+            GODOT_BINARY_INSTALL_DIR "${INSTALL_DIR}"
+        )
+    endif()
+endfunction()
+
+function(_godot_target_check_registered TARGET EXPECTED_VALUE)
+    get_target_property(REGISTERED "${TARGET}" _GODOT_REGISTERED)
+    
+    if(REGISTERED STREQUAL "REGISTERED-NOTFOUND")
+        set(REGISTERED NO)
+    endif()
+
+    if(REGISTERED AND NOT EXPECTED_VALUE)
+        message(FATAL_ERROR "Target ${TARGET} is already registered as a Godot module")
+    elseif(EXPECTED_VALUE AND NOT REGISTERED)
+        message(FATAL_ERROR "Target ${TARGET} is not registered as a Godot module")
+    endif()
+endfunction()
+
+function(_godot_generate_resource_id VAR)
+    if(NOT DEFINED _GODOT_RESOURCE_ID)
+        set(_GODOT_RESOURCE_ID "100000" CACHE INTERNAL "The global Godot resource id counter")
+    endif()
+    set(${VAR} ${_GODOT_RESOURCE_ID} PARENT_SCOPE)
+    math(EXPR _GODOT_RESOURCE_ID "${_GODOT_RESOURCE_ID} + 1")
+endfunction()
+
+function(_godot_target_get_resource_id VAR TARGET)
+    get_target_property(RESOURCE_ID "${TARGET}" _GODOT_RESOURCE_ID)
+
+    if(NOT RESOURCE_ID)
+        message(FATAL_ERROR "Target ${TARGET} is not registered as a Godot module")
+    endif()
+
+    set(${VAR} ${RESOURCE_ID} PARENT_SCOPE)
+endfunction()
+
+function(_godot_target_get_registered_classed VAR TARGET)
+    get_target_property(GODOT_CLASSES "${TARGET}" _GODOT_CLASSES)
+
+    if(NOT GODOT_CLASSES)
+        set(GODOT_CLASSES "")
+    endif()
+
+    set(${VAR} ${GODOT_CLASSES} PARENT_SCOPE)
+endfunction()
+
+function(_godot_target_get_library_install_dir VAR TARGET)
+    _godot_target_check_install_dir(INSTALL_DIR "${TARGET}")
+
+    if(WIN32 OR MINGW)
+        set(INSTALL_DIR "${INSTALL_DIR}/windows")
+    elseif(UNIX)
+        set(INSTALL_DIR "${INSTALL_DIR}/linux")
+    elseif(APPLE)
+        set(INSTALL_DIR "${INSTALL_DIR}/macos")
+    else()
+        message(FATAL_ERROR "Could not determine target platform")
+    endif()
+
+    set(${VAR} ${INSTALL_DIR} PARENT_SCOPE)
 endfunction()
