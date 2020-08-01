@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "Rng.hpp"
 
+#include <AudioStreamPlayer.hpp>
 #include <Godot.hpp>
 #include <PathFollow2D.hpp>
 #include <Position2D.hpp>
@@ -41,6 +42,10 @@ namespace dodgetc
   {
     get_typed_node<godot::Timer>("MobTimer")->stop();
     get_typed_node<godot::Timer>("ScoreTimer")->stop();
+
+    get_typed_node<godot::AudioStreamPlayer>("Music")->stop();
+    get_typed_node<godot::AudioStreamPlayer>("DeathSound")->play();
+
     get_typed_node<HUD>("HUD")->show_game_over();
 
     get_tree()->call_group("mobs", "queue_free");
@@ -87,6 +92,8 @@ namespace dodgetc
     auto hud = get_typed_node<HUD>("HUD");
     hud->update_score(score);
     hud->show_message("Get Ready!");
+
+    get_typed_node<godot::AudioStreamPlayer>("Music")->play();
   }
 
 }  // namespace dodgetc
