@@ -17,7 +17,7 @@ namespace dodgetc
   auto Mob::_register_methods() -> void
   {
     godot::register_method("_ready", &Mob::_ready);
-    godot::register_method("_on_VisibilityNotifier2D_screen_exited", &Mob::_on_screen_exited);
+    godot::register_method("on_screen_exited", &Mob::on_screen_exited);
 
     godot::register_property("minimum_speed", &Mob::minimum_speed, default_minimum_speed);
     godot::register_property("maximum_speed", &Mob::maximum_speed, default_maximum_speed);
@@ -36,7 +36,7 @@ namespace dodgetc
     animated_sprite->set_animation(mob_types[random_int(0, mob_types.size() - 1)]);
   }
 
-  auto Mob::_on_screen_exited() -> void
+  auto Mob::on_screen_exited() -> void
   {
     queue_free();
   }

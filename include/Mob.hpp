@@ -18,10 +18,10 @@ namespace dodgetc
     auto _init() -> void;
     auto _ready() -> void;
 
-    auto _on_screen_exited() -> void;
-
   private:
     GODOT_CLASS(Mob, godot::RigidBody2D)
+
+    auto on_screen_exited() -> void;
 
     int minimum_speed{};
     int maximum_speed{};
