@@ -6,7 +6,18 @@ project("dodgetc_native"
   DESCRIPTION "An implementation of the Godot \"Dodge the Creeps!\" tutorial game using godot-cpp"
 )
 
-list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
+include("FetchContent")
+
+FetchContent_Declare(
+  "Godot"
+  GIT_REPOSITORY https://github.com/fmorgner/godot-cmake.git
+)
+FetchContent_MakeAvailable("Godot")
+
+list(APPEND CMAKE_MODULE_PATH
+  "${PROJECT_SOURCE_DIR}/cmake/Modules"
+  "${PROJECT_BINARY_DIR}/_deps/godot-src/Modules"
+)
 
 include("Conan")
 include("Godot")
