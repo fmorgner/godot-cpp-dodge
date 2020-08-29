@@ -7,6 +7,7 @@
 
 #include <AudioStreamPlayer.hpp>
 #include <Godot.hpp>
+#include <Particles2D.hpp>
 #include <PathFollow2D.hpp>
 #include <Position2D.hpp>
 #include <Ref.hpp>
@@ -39,6 +40,12 @@ namespace dodgetc
 
     get_typed_node<godot::AudioStreamPlayer>("Music")->stop();
     get_typed_node<godot::AudioStreamPlayer>("DeathSound")->play();
+
+    auto player = get_typed_node<Player>("Player");
+    auto death_particles = get_typed_node<godot::Particles2D>("DeathParticles");
+    death_particles->set_position(player->get_position());
+    death_particles->set_visible(true);
+    death_particles->set_emitting(true);
 
     get_typed_node<HUD>("HUD")->show_game_over();
 
@@ -77,6 +84,9 @@ namespace dodgetc
   auto Main::new_game() -> void
   {
     score = 0;
+
+    auto death_particles = get_typed_node<godot::Particles2D>("DeathParticles");
+    death_particles->set_visible(false);
 
     auto player = get_typed_node<Player>("Player");
     auto start_position = get_typed_node<godot::Position2D>("StartPosition");
