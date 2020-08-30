@@ -30,6 +30,8 @@ namespace dodgetc
   private:
     GODOT_CLASS(Player, godot::Area2D)
 
+    auto set_collision_polygon(int frame) -> void;
+
     auto on_body_entered(godot::PhysicsBody2D * body) -> void;
     auto on_frame_changed() -> void;
 

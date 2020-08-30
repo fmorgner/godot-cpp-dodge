@@ -23,6 +23,7 @@ namespace dodgetc
     godot::register_method("on_body_entered", &Player::on_body_entered);
     godot::register_method("start", &Player::start);
     godot::register_method("on_frame_changed", &Player::on_frame_changed);
+    godot::register_method("set_collision_polygon", &Player::set_collision_polygon);
 
     godot::register_property("speed", &Player::speed, default_speed);
 
@@ -42,8 +43,6 @@ namespace dodgetc
     collision_polygons[1] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameUp1");
     collision_polygons[2] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameWalk0");
     collision_polygons[3] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameWalk1");
-
-    active_collision_polygon = collision_polygons[0];
 
     screen_size = get_viewport()->get_size();
     hide();
@@ -97,6 +96,11 @@ namespace dodgetc
       sprite->set_animation("up");
       sprite->set_flip_v(velocity.y > 0);
     }
+
+    if (velocity.length())
+    {
+      call_deferred("set_collision_polygon", sprite->get_frame());
+    }
   }
 
   auto Player::start(godot::Vector2 position) -> void
@@ -106,11 +110,41 @@ namespace dodgetc
     sprite->set_frame(0);
     sprite->set_flip_h(false);
     sprite->set_flip_v(false);
-    active_collision_polygon->set_disabled(true);
-    active_collision_polygon = collision_polygons[0];
-    active_collision_polygon->set_disabled(false);
-
+    set_collision_polygon(0);
     show();
+  }
+
+  auto Player::set_collision_polygon(int frame) -> void
+  {
+    auto offset = (sprite->get_animation() == "up") ? 0 : 2;
+    auto new_collision_polygon = collision_polygons[frame + offset];
+
+    auto constexpr enable_collision_polygon = [](auto polygon) {
+      polygon->set_disabled(false);
+      polygon->set_visible(true);
+    };
+
+    auto constexpr disable_collision_polygon = [](auto polygon) {
+      polygon->set_disabled(true);
+      polygon->set_visible(false);
+    };
+
+    if (!active_collision_polygon)
+    {
+      active_collision_polygon = new_collision_polygon;
+      enable_collision_polygon(active_collision_polygon);
+    }
+    else if (active_collision_polygon != new_collision_polygon)
+    {
+      disable_collision_polygon(active_collision_polygon);
+      active_collision_polygon = collision_polygons[frame + offset];
+      enable_collision_polygon(active_collision_polygon);
+    }
+
+    if (sprite->is_flipped_v() != (active_collision_polygon->get_rotation_degrees() != 0.f))
+    {
+      active_collision_polygon->set_rotation_degrees(sprite->is_flipped_v() ? 180.f : 0.f);
+    }
   }
 
   auto Player::on_body_entered(godot::PhysicsBody2D * body) -> void
@@ -122,10 +156,7 @@ namespace dodgetc
 
   auto Player::on_frame_changed() -> void
   {
-    auto frame_collision_polygon = collision_polygons[sprite->get_frame() + ((sprite->get_animation() == "up") ? 0 : 2)];
-    active_collision_polygon->set_disabled(true);
-    active_collision_polygon = frame_collision_polygon;
-    active_collision_polygon->set_disabled(false);
+    call_deferred("set_collision_polygon", sprite->get_frame());
   }
 
 }  // namespace dodgetc
