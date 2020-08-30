@@ -46,6 +46,7 @@ namespace dodgetc
     death_particles->set_position(player->get_position());
     death_particles->set_visible(true);
     death_particles->set_emitting(true);
+    death_particles->restart();
 
     get_typed_node<HUD>("HUD")->show_game_over();
 
