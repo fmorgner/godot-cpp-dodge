@@ -1,11 +1,12 @@
 #include "Player.hpp"
 
 #include <AnimatedSprite.hpp>
-#include <CollisionShape2D.hpp>
+#include <CollisionPolygon2D.hpp>
 #include <Input.hpp>
 #include <Viewport.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 namespace dodgetc
 {
@@ -22,6 +23,7 @@ namespace dodgetc
     godot::register_method("_process", &Player::_process);
     godot::register_method("on_body_entered", &Player::on_body_entered);
     godot::register_method("start", &Player::start);
+    godot::register_method("on_frame_changed", &Player::on_frame_changed);
 
     godot::register_property("speed", &Player::speed, default_speed);
 
@@ -35,6 +37,15 @@ namespace dodgetc
 
   auto Player::_ready() -> void
   {
+    sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
+
+    collision_polygons[0] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameUp0");
+    collision_polygons[1] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameUp1");
+    collision_polygons[2] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameWalk0");
+    collision_polygons[3] = get_typed_node<godot::CollisionPolygon2D>("CollisionFrameWalk1");
+
+    active_collision_polygon = collision_polygons[0];
+
     screen_size = get_viewport()->get_size();
     hide();
   }
@@ -61,16 +72,14 @@ namespace dodgetc
       --velocity.y;
     }
 
-    auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
-
     if (velocity.length() > 0)
     {
       velocity = velocity.normalized() * speed;
-      animated_sprite->play();
+      sprite->play();
     }
     else
     {
-      animated_sprite->stop();
+      sprite->stop();
     }
 
     auto position = get_position() + velocity * delta;
@@ -80,32 +89,45 @@ namespace dodgetc
 
     if (velocity.x)
     {
-      animated_sprite->set_animation("walk");
-      animated_sprite->set_flip_v(false);
-      animated_sprite->set_flip_h(velocity.x < 0);
+      sprite->set_animation("walk");
+      sprite->set_flip_v(false);
+      sprite->set_flip_h(velocity.x < 0);
     }
     else if (velocity.y)
     {
-      animated_sprite->set_animation("up");
-      animated_sprite->set_flip_v(velocity.y > 0);
+      sprite->set_animation("up");
+      sprite->set_flip_v(velocity.y > 0);
     }
   }
 
   auto Player::start(godot::Vector2 position) -> void
   {
     set_position(position);
-    auto animated_sprite = get_typed_node<godot::AnimatedSprite>("AnimatedSprite");
-    animated_sprite->set_flip_h(false);
-    animated_sprite->set_flip_v(false);
+    sprite->set_animation("up");
+    sprite->set_frame(0);
+    sprite->set_flip_h(false);
+    sprite->set_flip_v(false);
+    active_collision_polygon->set_disabled(true);
+    active_collision_polygon = collision_polygons[0];
+    active_collision_polygon->set_disabled(false);
+
     show();
-    get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_disabled(false);
   }
 
   auto Player::on_body_entered(godot::PhysicsBody2D * body) -> void
   {
     hide();
     emit_signal("hit");
-    get_typed_node<godot::CollisionShape2D>("CollisionShape2D")->set_deferred("disabled", true);
+    active_collision_polygon->set_deferred("disabled", false);
+  }
+
+  auto Player::on_frame_changed() -> void
+  {
+    auto frame_collision_polygon = collision_polygons[sprite->get_frame() + ((sprite->get_animation() == "up") ? 0 : 2)];
+    std::cout << "new collision shape will be: " << frame_collision_polygon << '\n';
+    active_collision_polygon->set_disabled(true);
+    active_collision_polygon = frame_collision_polygon;
+    active_collision_polygon->set_disabled(false);
   }
 
 }  // namespace dodgetc

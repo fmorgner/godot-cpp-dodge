@@ -3,10 +3,14 @@
 
 #include "TypedNodeCastMixin.hpp"
 
+#include <AnimatedSprite.hpp>
 #include <Area2D.hpp>
+#include <CollisionPolygon2D.hpp>
 #include <Godot.hpp>
 #include <PhysicsBody2D.hpp>
 #include <Vector2.hpp>
+
+#include <array>
 
 namespace dodgetc
 {
@@ -27,9 +31,13 @@ namespace dodgetc
     GODOT_CLASS(Player, godot::Area2D)
 
     auto on_body_entered(godot::PhysicsBody2D * body) -> void;
+    auto on_frame_changed() -> void;
 
     int speed{};
     godot::Vector2 screen_size{};
+    godot::AnimatedSprite * sprite{};
+    godot::CollisionPolygon2D * active_collision_polygon{};
+    std::array<godot::CollisionPolygon2D *, 4> collision_polygons{};
   };
 
 }  // namespace dodgetc
