@@ -23,6 +23,7 @@ include("Conan")
 include("Godot")
 
 conan_check(REQUIRED)
+conan_add_remote(NAME "fmorgner" URL "https://api.bintray.com/conan/fmorgner/conan-public")
 conan_cmake_run(CONANFILE "conanfile.txt"
   OUTPUT_QUIET
   BASIC_SETUP
@@ -55,6 +56,10 @@ set_target_properties("dodgetc" PROPERTIES
   LINK_FLAGS_MINSIZEREL "-s"
   GODOT_BINARY_INSTALL_DIR "godot/bin"
 )
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_definitions("dodgetc" PRIVATE "_USE_MATH_DEFINES")
+endif()
 
 godot_register_library("dodgetc")
 
