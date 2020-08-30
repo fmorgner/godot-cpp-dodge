@@ -20,7 +20,7 @@ If you have installed the required tools, issue the following commands from the 
 
 ```
 $ cmake -S . -B build
-$ cmake --build build --target install
+$ cmake --build build
 ```
 
 If the compilation succeeds, you can now open the project in the Godot editor.
