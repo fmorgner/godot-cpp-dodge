@@ -6,7 +6,6 @@
 #include <Viewport.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 namespace dodgetc
 {
@@ -124,7 +123,6 @@ namespace dodgetc
   auto Player::on_frame_changed() -> void
   {
     auto frame_collision_polygon = collision_polygons[sprite->get_frame() + ((sprite->get_animation() == "up") ? 0 : 2)];
-    std::cout << "new collision shape will be: " << frame_collision_polygon << '\n';
     active_collision_polygon->set_disabled(true);
     active_collision_polygon = frame_collision_polygon;
     active_collision_polygon->set_disabled(false);
