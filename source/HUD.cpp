@@ -1,6 +1,7 @@
 #include "HUD.hpp"
 
 #include <Button.hpp>
+#include <Dictionary.hpp>
 #include <Godot.hpp>
 #include <Label.hpp>
 #include <SceneTree.hpp>
@@ -18,7 +19,7 @@ namespace dodgetc
     godot::register_method("show_start_message", &HUD::show_start_message);
     godot::register_method("show_start_button", &HUD::show_start_button);
 
-    godot::register_signal<HUD>("start_game");
+    godot::register_signal<HUD>("start_game", godot::Dictionary{});
   }
 
   auto HUD::_init() -> void

@@ -2,6 +2,7 @@
 
 #include <AnimatedSprite.hpp>
 #include <CollisionPolygon2D.hpp>
+#include <Dictionary.hpp>
 #include <Input.hpp>
 #include <Viewport.hpp>
 
@@ -27,7 +28,7 @@ namespace dodgetc
 
     godot::register_property("speed", &Player::speed, default_speed);
 
-    godot::register_signal<Player>("hit");
+    godot::register_signal<Player>("hit", godot::Dictionary{});
   }
 
   auto Player::_init() -> void
