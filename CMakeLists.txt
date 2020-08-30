@@ -10,7 +10,7 @@ include("FetchContent")
 
 FetchContent_Declare(
   "Godot"
-  GIT_REPOSITORY https://github.com/fmorgner/godot-cmake.git
+  GIT_REPOSITORY https://github.com/fmorgner/cmake-godot-cpp.git
 )
 FetchContent_MakeAvailable("Godot")
 
