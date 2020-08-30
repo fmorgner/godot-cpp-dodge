@@ -522,6 +522,7 @@ macro(conan_check)
     execute_process(COMMAND ${CONAN_CMD} --version
                     OUTPUT_VARIABLE CONAN_VERSION_OUTPUT
                     ERROR_VARIABLE CONAN_VERSION_OUTPUT)
+    string(STRIP "${CONAN_VERSION_OUTPUT}" CONAN_VERSION_OUTPUT)
     message(STATUS "Conan: Version found ${CONAN_VERSION_OUTPUT}")
 
     if(DEFINED CONAN_VERSION)
