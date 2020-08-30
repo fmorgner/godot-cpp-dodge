@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://art/enemySwimming_1.png" type="Texture" id=1]
 [ext_resource path="res://art/enemyFlyingAlt_1.png" type="Texture" id=2]
@@ -10,11 +10,6 @@
 
 [sub_resource type="SpriteFrames" id=1]
 animations = [ {
-"frames": [ ExtResource( 2 ), ExtResource( 6 ) ],
-"loop": true,
-"name": "fly",
-"speed": 3.0
-}, {
 "frames": [ ExtResource( 1 ), ExtResource( 5 ) ],
 "loop": true,
 "name": "swim",
@@ -24,11 +19,12 @@ animations = [ {
 "loop": true,
 "name": "walk",
 "speed": 3.0
+}, {
+"frames": [ ExtResource( 2 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "fly",
+"speed": 3.0
 } ]
-
-[sub_resource type="CapsuleShape2D" id=2]
-radius = 36.2188
-height = 28.3156
 
 [node name="RigidBody2D" type="RigidBody2D" groups=[
 "mobs",
@@ -43,12 +39,39 @@ __meta__ = {
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.75, 0.75 )
 frames = SubResource( 1 )
-animation = "walk"
+animation = "fly"
 playing = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-rotation = 1.5708
-shape = SubResource( 2 )
-
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+
+[node name="CollisionFrameFly0" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -3, -31, 6, -33, 16, -32, 27, -28, 34, -21, 39, -13, 41, -5, 41, 5, 38, 15, 31, 25, 23, 31, 11, 34, 0, 33, -4, 32, -29, 57, -34, 57, -39, 54, -40, 49, -40, 46, -13, 18, -13, -18, -40, -45, -40, -52, -36, -57, -29, -57 )
+disabled = true
+
+[node name="CollisionFrameFly1" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -11, -33, 0, -33, 15, -26, 25, -12, 27, 0, 24, 15, 14, 27, 0, 34, -11, 34, -11, 62, -14, 68, -19, 70, -25, 67, -27, 62, -27, -65, -22, -70, -17, -70, -11, -66 )
+disabled = true
+
+[node name="CollisionFrameSwim0" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -14.7733, -35.8289, 18.1991, -35.9692, 30.4059, -32.3212, 39.2452, -25.4461, 45.5591, -17.0277, 48.9265, -8.32859, 49.2071, 5.70218, 46.5412, 15.664, 39.8065, 24.784, 31.9492, 31.0979, 24.092, 35.8684, -15.0539, 35.728, -18.1406, 34.7459, -20.2453, 30.677, -20.3856, 5.56187, -25.8576, 11.4548, -35.1179, 16.9268, -45.7813, 20.0136, -49.1487, 15.8043, -49.289, 9.06956, -47.044, 2.33479, -47.044, -2.71629, -49.5696, -8.32859, -49.289, -15.0634, -45.9216, -20.6757, -34.8373, -17.168, -25.0157, -10.9944, -20.3856, -5.66275, -20.1049, -31.9003, -17.4391, -34.5661 )
+disabled = true
+
+[node name="CollisionFrameSwim1" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -15.6151, -35.5483, 19, -36, 27, -34, 38.1228, -26.7089, 47.3831, -13.2394, 49.2071, -6.5046, 49.3474, 4.72002, 47.2428, 11.8757, 42.6126, 21.136, 36, 29, 26.3369, 33.6234, 18.7603, 35.8684, -5.65325, 36.0087, -15.4748, 36.149, -18.1406, 33.7637, -20.1049, 30.256, -20.3856, 13.9803, -25.0157, 20.2942, -31.8908, 26.0468, -40.7302, 30.5367, -46.0619, 31.2382, -49.289, 25.7662, -49.289, 16.085, -47.1843, 9.06956, -24.1739, 0.370483, -46.3425, -9.03014, -46.4828, -9.45106, -48.868, -16.4664, -48.868, -26.1477, -46, -32, -39, -30, -30, -25, -25, -20, -19.9646, -14.0812, -19.9646, -31.4794, -18.1406, -34.1452 )
+disabled = true
+
+[node name="CollisionFrameWalk0" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -21.9289, -35.8289, 19.3215, -36.1095, 31.8089, -31.6197, 40.3677, -23.7625, 47.9443, -11.1348, 49.4877, 0.0898705, 47.5234, 12.9982, 40.508, 24.2228, 28.0206, 33.2025, 19.1812, 35.728, -21.7886, 36.149, -24.5948, 34.325, -26.5591, 31.7994, -26.98, 13.4191, -44.6588, 13.5594, -47.7456, 11.3145, -49.289, 8.64864, -49.1487, 5.00064, -47.7456, 2.19449, -44.2379, 0.510796, -44.3782, -2.57598, -47.044, -4.25967, -49.4293, -7.06583, -49.289, -11.5557, -46.2022, -15.7649, -26.6994, -15.4843, -26.6994, -31.76, -24.8754, -34.1452 )
+disabled = true
+
+[node name="CollisionFrameWalk1" type="CollisionPolygon2D" parent="."]
+visible = false
+polygon = PoolVector2Array( -23.0514, -36.5305, 17.0766, -36.1095, 30.6865, -30.6375, 42.0514, -18.992, 46.5412, -9.03014, 47.5234, 0.230179, 45.1382, 12.016, 40.7886, 20.9957, 30.5462, 30.677, 16.796, 35.8684, -24.5948, 36.149, -27.2606, 33.904, -28.9443, 30.9576, -29.225, 17.488, -39.1868, 20.8554, -43.817, 20.1539, -46.3425, 16.7865, -46.4828, 11.4548, -42.9751, 8.08741, -29.225, 4.57972, -29.225, -7.20613, -36.8016, -9.17044, -43.9573, -11.696, -46.2022, -14.0812, -46.2022, -19.4129, -43.5363, -22.2191, -40.5899, -23.3415, -29.225, -19.8338, -28.9443, -30.6375, -27.401, -34.2855 )
+disabled = true
+[connection signal="frame_changed" from="AnimatedSprite" to="." method="on_frame_changed"]
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="on_screen_exited"]
