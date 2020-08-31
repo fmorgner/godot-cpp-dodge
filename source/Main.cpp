@@ -78,6 +78,7 @@ namespace dodgetc
 
   auto Main::on_player_collected(Coin * coin) -> void
   {
+    get_typed_node<godot::AudioStreamPlayer>("CoinCollectedSound")->play();
     coin->queue_free();
     increase_score(5);
   }

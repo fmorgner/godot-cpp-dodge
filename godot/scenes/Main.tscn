@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://bin/dodgetc_Main.gdns" type="Script" id=1]
 [ext_resource path="res://scenes/Mob.tscn" type="PackedScene" id=2]
@@ -8,8 +8,9 @@
 [ext_resource path="res://art/gameover.wav" type="AudioStream" id=6]
 [ext_resource path="res://art/deathSparkle.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Coin.tscn" type="PackedScene" id=8]
+[ext_resource path="res://art/SFX_Pickup_19.wav" type="AudioStream" id=9]
 
-[sub_resource type="ParticlesMaterial" id=2]
+[sub_resource type="ParticlesMaterial" id=1]
 lifetime_randomness = 0.4
 emission_shape = 1
 emission_sphere_radius = 10.0
@@ -26,7 +27,7 @@ color = Color( 0.996078, 0.8, 0.27451, 1 )
 hue_variation = 0.2
 hue_variation_random = 0.75
 
-[sub_resource type="Curve2D" id=1]
+[sub_resource type="Curve2D" id=2]
 _data = {
 "points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0 )
 }
@@ -53,7 +54,7 @@ amount = 128
 lifetime = 2.0
 one_shot = true
 explosiveness = 1.0
-process_material = SubResource( 2 )
+process_material = SubResource( 1 )
 texture = ExtResource( 7 )
 
 [node name="CoinLayer" type="CanvasLayer" parent="."]
@@ -78,7 +79,7 @@ wait_time = 5.0
 position = Vector2( 240, 450 )
 
 [node name="MobPath" type="Path2D" parent="."]
-curve = SubResource( 1 )
+curve = SubResource( 2 )
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
@@ -87,6 +88,9 @@ stream = ExtResource( 5 )
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
+
+[node name="CoinCollectedSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
 [connection signal="collected" from="Player" to="." method="on_player_collected"]
 [connection signal="hit" from="Player" to="." method="on_player_hit"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]

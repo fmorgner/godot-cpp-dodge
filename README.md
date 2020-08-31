@@ -126,3 +126,4 @@ All assets used in this project are licensed as follows:
 | Godot Engine Logo      | Andrea Calabró                                                      | [CC-BY-3.0](https://spdx.org/licenses/CC-BY-3.0.html)       |
 | Game Over Sound        | `<UNKNOWN>`                                                         | `<UNKNOWN>`                                                 |
 | Coin Animation         | [DontMind8](https://opengameart.org/content/coin-animation)         | [CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)       |
+| SFX Pickup 19          | [jalastram](https://opengameart.org/content/8-bit-pickup-1)         | [CC-BY-3.0](https://spdx.org/licenses/CC-BY-3.0.html)       |
