@@ -23,6 +23,12 @@ namespace dodgetc
 
   private:
     GODOT_CLASS(Coin, godot::StaticBody2D)
+
+    auto _ready() -> void;
+
+    auto on_life_timer_timed_out() -> void;
+
+    int lifetime{};
   };
 
 }  // namespace dodgetc
