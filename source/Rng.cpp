@@ -15,6 +15,7 @@ namespace
     if (!instance.is_valid())
     {
       instance = godot::Ref{godot::RandomNumberGenerator::_new()};
+      instance->randomize();
     }
     return instance;
   }
