@@ -9,11 +9,6 @@
 [ext_resource path="res://art/deathSparkle.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Coin.tscn" type="PackedScene" id=8]
 
-[sub_resource type="Curve2D" id=1]
-_data = {
-"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0 )
-}
-
 [sub_resource type="ParticlesMaterial" id=2]
 lifetime_randomness = 0.4
 emission_shape = 1
@@ -31,6 +26,11 @@ color = Color( 0.996078, 0.8, 0.27451, 1 )
 hue_variation = 0.2
 hue_variation_random = 0.75
 
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0 )
+}
+
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
 coin = ExtResource( 8 )
@@ -45,6 +45,22 @@ __meta__ = {
 }
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
+
+[node name="DeathParticles" type="Particles2D" parent="."]
+visible = false
+emitting = false
+amount = 128
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource( 2 )
+texture = ExtResource( 7 )
+
+[node name="CoinLayer" type="CanvasLayer" parent="."]
+
+[node name="MobLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="." instance=ExtResource( 4 )]
 
 [node name="MobTimer" type="Timer" parent="."]
 wait_time = 0.5
@@ -66,27 +82,15 @@ curve = SubResource( 1 )
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 
-[node name="HUD" parent="." instance=ExtResource( 4 )]
-
 [node name="Music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
 
 [node name="DeathSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
-
-[node name="DeathParticles" type="Particles2D" parent="."]
-visible = false
-emitting = false
-amount = 128
-lifetime = 2.0
-one_shot = true
-explosiveness = 1.0
-process_material = SubResource( 2 )
-texture = ExtResource( 7 )
 [connection signal="collected" from="Player" to="." method="on_player_collected"]
 [connection signal="hit" from="Player" to="." method="on_player_hit"]
+[connection signal="start_game" from="HUD" to="." method="new_game"]
 [connection signal="timeout" from="MobTimer" to="." method="on_mob_timer_timed_out"]
 [connection signal="timeout" from="ScoreTimer" to="." method="on_score_timer_timed_out"]
 [connection signal="timeout" from="StartTimer" to="." method="on_start_timer_timed_out"]
 [connection signal="timeout" from="CoinTimer" to="." method="on_coin_timer_timed_out"]
-[connection signal="start_game" from="HUD" to="." method="new_game"]

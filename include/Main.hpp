@@ -4,6 +4,7 @@
 #include "Coin.hpp"
 #include "TypedNodeCastMixin.hpp"
 
+#include <CanvasLayer.hpp>
 #include <Godot.hpp>
 #include <Node.hpp>
 #include <PackedScene.hpp>
@@ -36,6 +37,9 @@ namespace dodgetc
     auto on_mob_timer_timed_out() -> void;
     auto on_score_timer_timed_out() -> void;
     auto on_start_timer_timed_out() -> void;
+
+    godot::CanvasLayer * coin_layer{};
+    godot::CanvasLayer * mob_layer{};
 
     godot::Ref<godot::PackedScene> coin{};
     godot::Ref<godot::PackedScene> mob{};

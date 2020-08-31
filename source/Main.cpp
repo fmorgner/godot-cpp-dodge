@@ -7,6 +7,7 @@
 #include "Rng.hpp"
 
 #include <AudioStreamPlayer.hpp>
+#include <CanvasLayer.hpp>
 #include <Godot.hpp>
 #include <Particles2D.hpp>
 #include <PathFollow2D.hpp>
@@ -45,6 +46,9 @@ namespace dodgetc
 
   auto Main::_ready() -> void
   {
+    coin_layer = get_typed_node<godot::CanvasLayer>("CoinLayer");
+    mob_layer = get_typed_node<godot::CanvasLayer>("MobLayer");
+
     coin_timer = get_typed_node<godot::Timer>("CoinTimer");
 
     viewport_size = get_viewport()->get_size();
@@ -101,7 +105,7 @@ namespace dodgetc
     auto maximum_velocity = mob_instance->get("maximum_speed");
     mob_instance->set_linear_velocity(godot::Vector2{random_range(minimum_velocity, maximum_velocity), 0}.rotated(direction));
 
-    add_child(mob_instance);
+    mob_layer->add_child(mob_instance);
   }
 
   auto Main::on_score_timer_timed_out() -> void
@@ -149,7 +153,7 @@ namespace dodgetc
         random_range(y_bounds.first, y_bounds.second),
     });
 
-    add_child(new_coin);
+    coin_layer->add_child(new_coin);
   }
 
   auto Main::increase_score(int increment) -> void
