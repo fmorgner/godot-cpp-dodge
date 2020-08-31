@@ -1,9 +1,9 @@
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/fmorgner/godot-cpp-dodge)
-![GitHub](https://img.shields.io/github/license/fmorgner/godot-cpp-dodge)
-![C++17](https://img.shields.io/badge/c%2B%2B-17-orange)
-![Godot 3.2](https://img.shields.io/badge/Godot-3.2-blue)
-![Linux](https://img.shields.io/badge/OS-Linux-green)
-![Windows](https://img.shields.io/badge/OS-Windows-green)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/fmorgner/godot-cpp-dodge)](https://github.com/fmorgner/godot-cpp-dodge/releases/)
+[![GitHub](https://img.shields.io/github/license/fmorgner/godot-cpp-dodge)](LICENSE)
+[![C++17](https://img.shields.io/badge/c%2B%2B-17-orange)](https://en.cppreference.com/w/cpp/17)
+[![Godot 3.2](https://img.shields.io/badge/Godot-3.2-blue)](https://godotengine.org/)
+[![Linux](https://img.shields.io/badge/OS-Linux-green)](https://github.com/fmorgner/godot-cpp-dodge/releases/latest/download/Dodge.the.Creeps.Linux.64.tzst)
+[![Windows](https://img.shields.io/badge/OS-Windows-green)](https://github.com/fmorgner/godot-cpp-dodge/releases/latest/download/Dodge.the.Creeps.Windows.64.zip)
 
 # Dodge the Creeps!
 
@@ -13,7 +13,7 @@ This is an implementation of the Godot "Dodge the Creeps!" tutorial game using g
 
 ## Running The Binary Packages
 
-Packaged versions can be found on the [Releases](/releases) page.
+Packaged versions can be found on the [Releases](https://github.com/fmorgner/godot-cpp-dodge/releases/) page.
 Recent releases support both Linux and Windows.
 
 ### Linux
