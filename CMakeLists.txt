@@ -34,6 +34,7 @@ conan_cmake_run(CONANFILE "conanfile.txt"
 
 add_library("dodgetc" SHARED
   "source/godot_native_library.cpp"
+  "source/Coin.cpp"
   "source/HUD.cpp"
   "source/Main.cpp"
   "source/Mob.cpp"
@@ -63,6 +64,7 @@ endif()
 
 godot_register_library("dodgetc")
 
+godot_register_class("dodgetc" "Coin")
 godot_register_class("dodgetc" "HUD")
 godot_register_class("dodgetc" "Main")
 godot_register_class("dodgetc" "Mob")

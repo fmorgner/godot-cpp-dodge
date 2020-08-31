@@ -29,6 +29,7 @@ namespace dodgetc
     godot::register_property("speed", &Player::speed, default_speed);
 
     godot::register_signal<Player>("hit", godot::Dictionary{});
+    godot::register_signal<Player>("collected", "coin", GODOT_VARIANT_TYPE_OBJECT);
   }
 
   auto Player::_init() -> void
@@ -150,9 +151,16 @@ namespace dodgetc
 
   auto Player::on_body_entered(godot::PhysicsBody2D * body) -> void
   {
-    hide();
-    emit_signal("hit");
-    active_collision_polygon->set_deferred("disabled", false);
+    if (body->is_in_group("mobs"))
+    {
+      hide();
+      emit_signal("hit");
+      active_collision_polygon->set_deferred("disabled", false);
+    }
+    else if (body->is_in_group("coins"))
+    {
+      emit_signal("collected", body);
+    }
   }
 
   auto Player::on_frame_changed() -> void

@@ -20,6 +20,7 @@ animations = [ {
 } ]
 
 [node name="Player" type="Area2D"]
+collision_mask = 3
 script = ExtResource( 5 )
 __meta__ = {
 "_edit_group_": true

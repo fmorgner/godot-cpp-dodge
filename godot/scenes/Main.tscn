@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://bin/dodgetc_Main.gdns" type="Script" id=1]
 [ext_resource path="res://scenes/Mob.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://art/House In a Forest Loop.ogg" type="AudioStream" id=5]
 [ext_resource path="res://art/gameover.wav" type="AudioStream" id=6]
 [ext_resource path="res://art/deathSparkle.png" type="Texture" id=7]
+[ext_resource path="res://scenes/Coin.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Curve2D" id=1]
 _data = {
@@ -32,6 +33,7 @@ hue_variation_random = 0.75
 
 [node name="Main" type="Node"]
 script = ExtResource( 1 )
+coin = ExtResource( 8 )
 mob = ExtResource( 2 )
 
 [node name="Background" type="ColorRect" parent="."]
@@ -52,6 +54,9 @@ wait_time = 0.5
 [node name="StartTimer" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
+
+[node name="CoinTimer" type="Timer" parent="."]
+wait_time = 5.0
 
 [node name="StartPosition" type="Position2D" parent="."]
 position = Vector2( 240, 450 )
@@ -78,8 +83,10 @@ one_shot = true
 explosiveness = 1.0
 process_material = SubResource( 2 )
 texture = ExtResource( 7 )
+[connection signal="collected" from="Player" to="." method="on_player_collected"]
 [connection signal="hit" from="Player" to="." method="on_player_hit"]
 [connection signal="timeout" from="MobTimer" to="." method="on_mob_timer_timed_out"]
 [connection signal="timeout" from="ScoreTimer" to="." method="on_score_timer_timed_out"]
 [connection signal="timeout" from="StartTimer" to="." method="on_start_timer_timed_out"]
+[connection signal="timeout" from="CoinTimer" to="." method="on_coin_timer_timed_out"]
 [connection signal="start_game" from="HUD" to="." method="new_game"]
