@@ -23,13 +23,14 @@ include("Conan")
 include("Godot")
 
 conan_check(REQUIRED)
-conan_add_remote(NAME "fmorgner" URL "https://api.bintray.com/conan/fmorgner/conan-public")
+conan_add_remote(NAME "arknet" URL "https://conan.arknet.ch/artifactory/api/conan/public")
 conan_cmake_run(CONANFILE "conanfile.txt"
   OUTPUT_QUIET
   BASIC_SETUP
   CMAKE_TARGETS
   BUILD "missing"
   NO_OUTPUT_DIRS
+  SETTINGS "os=${CMAKE_SYSTEM_NAME}"
 )
 
 add_library("dodgetc" SHARED
