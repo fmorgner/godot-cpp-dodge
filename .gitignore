@@ -1,3 +1,9 @@
 /build
+/build_package
 /pkg
 /*.tzst
+
+/Dodge.the.Creeps.Linux.64.tzst
+/Dodge.the.Creeps.Linux.64.tzst.sig
+/Dodge.the.Creeps.Windows.64.zip
+/Dodge.the.Creeps.Windows.64.zip.sig

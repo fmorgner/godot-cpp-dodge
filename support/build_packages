@@ -1,0 +1,38 @@
+#!/bin/env bash
+
+set -e
+
+if hash godot 2>/dev/null; then
+  GODOT_EXE=$(which godot)
+elif hash org.godotengine.Godot; then
+  GODOT_EXE=$(which org.godotengine.Godot)
+else
+  echo "No godot executable found!"
+  exit 1
+fi
+
+CMAKE_ARGS=-DCMAKE_BUILD_TYPE=MinSizeRel
+
+if [ -r "/usr/share/mingw/toolchain-x86_64-w64-mingw32.cmake" ]; then
+  mkdir -p "pkg/Dodge the Creeps! (Windows 64)"
+  cmake -S . -B build_package/windows -DCMAKE_TOOLCHAIN_FILE=/usr/share/mingw/toolchain-x86_64-w64-mingw32.cmake ${CMAKE_ARGS}
+  cmake --build build_package/windows
+fi
+
+mkdir -p "pkg/Dodge the Creeps! (Linux 64)"
+cmake -S . -B build_package/linux ${CMAKE_ARGS}
+cmake --build build_package/linux
+
+cd pkg
+
+if [ -f "../godot/bin/windows/dodgetc.dll" ]; then
+  ${GODOT_EXE} --path ../godot --export "Windows" "../pkg/Dodge the Creeps! (Windows 64)/Dodge the Creeps!.exe"
+  zip -9 -r "../Dodge.the.Creeps.Windows.64.zip" 'Dodge the Creeps! (Windows 64)'
+fi
+
+if [ -f "../godot/bin/linux/libdodgetc.so" ]; then
+  ${GODOT_EXE} --path ../godot --export "Linux" "../pkg/Dodge the Creeps! (Linux 64)/Dodge the Creeps!.x86_64"
+  ZSTD_CLEVEL=19 tar -czf "../Dodge.the.Creeps.Linux.64.tzst" 'Dodge the Creeps! (Linux 64)'
+fi
+
+cd ..

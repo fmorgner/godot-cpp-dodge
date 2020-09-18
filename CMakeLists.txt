@@ -8,10 +8,7 @@ project("dodgetc_native"
 
 include("FetchContent")
 
-FetchContent_Declare(
-  "Godot"
-  GIT_REPOSITORY https://github.com/fmorgner/cmake-godot-cpp.git
-)
+FetchContent_Declare( "Godot" GIT_REPOSITORY https://github.com/fmorgner/cmake-godot-cpp.git)
 FetchContent_MakeAvailable("Godot")
 
 list(APPEND CMAKE_MODULE_PATH
